@@ -150,6 +150,8 @@ public:
     bool checkForUpdates() const;
     void setCheckForUpdates(bool on);
 
+    bool wheelZoomsByDefault() const;
+
     /**
      * Provides access to the QSettings instance to allow storing/retrieving
      * arbitrary values. The naming style for groups and keys is CamelCase.
@@ -171,6 +173,7 @@ public slots:
     void setAutomappingDrawing(bool enabled);
     void setOpenLastFilesOnStartup(bool load);
     void setPluginEnabled(const QString &fileName, bool enabled);
+    void setWheelZoomsByDefault(bool mode);
 
     void clearRecentFiles();
 
@@ -256,6 +259,7 @@ private:
     int mRunCount;
     bool mIsPatron;
     bool mCheckForUpdates;
+    bool mWheelZoomsByDefault;
 
     static Preferences *mInstance;
 };
@@ -309,6 +313,11 @@ inline bool Preferences::checkForUpdates() const
 inline bool Preferences::openLastFilesOnStartup() const
 {
     return mOpenLastFilesOnStartup;
+}
+
+inline bool Preferences::wheelZoomsByDefault() const
+{
+    return mWheelZoomsByDefault;
 }
 
 } // namespace Internal

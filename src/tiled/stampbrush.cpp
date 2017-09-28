@@ -158,6 +158,7 @@ void StampBrush::mouseReleased(QGraphicsSceneMouseEvent *event)
             // allow going over different variations by repeatedly clicking
             updatePreview();
         }
+        break;
     default:
         // do nothing?
         break;
@@ -312,7 +313,8 @@ void StampBrush::endCapture()
  */
 QRegion StampBrush::doPaint(int flags)
 {
-    const TileLayer *preview = mPreviewLayer.data();
+    // local reference to avoid issues when member gets cleared
+    SharedTileLayer preview = mPreviewLayer;
     if (!preview)
         return QRegion();
 
@@ -330,7 +332,7 @@ QRegion StampBrush::doPaint(int flags)
                                                tileLayer,
                                                preview->x(),
                                                preview->y(),
-                                               preview);
+                                               preview.data());
 
     if (!mMissingTilesets.isEmpty()) {
         for (const SharedTileset &tileset : mMissingTilesets) {
@@ -367,7 +369,7 @@ void StampBrush::drawPreviewLayer(const QVector<QPoint> &list)
             return;
 
         QRegion paintedRegion;
-        for (const QPoint p : list)
+        for (const QPoint &p : list)
             paintedRegion += QRect(p, QSize(1, 1));
 
         QRect bounds = paintedRegion.boundingRect();
@@ -392,7 +394,7 @@ void StampBrush::drawPreviewLayer(const QVector<QPoint> &list)
             return;
 
         QRegion paintedRegion;
-        for (const QPoint p : list)
+        for (const QPoint &p : list)
             paintedRegion += QRect(p, QSize(1, 1));
 
         QRect bounds = paintedRegion.boundingRect();
@@ -404,7 +406,7 @@ void StampBrush::drawPreviewLayer(const QVector<QPoint> &list)
                               dynamic_cast<StaggeredRenderer *>(mapDocument()->renderer()),
                               mapDocument()->map()->staggerAxis());
 
-        for (const QPoint p : list) {
+        for (const QPoint &p : list) {
             Cell cell = wangFiller.findFittingCell(*tileLayer,
                                                    *preview.data(),
                                                    paintedRegion,
