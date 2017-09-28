@@ -121,6 +121,7 @@ bool GmxPlugin::write(const Map *map, const QString &fileName)
     writeProperty(stream, map, "persistent", false);
     writeProperty(stream, map, "clearDisplayBuffer", true);
     writeProperty(stream, map, "clearViewBackground", false);
+    stream.writeTextElement("code", QString(optionalProperty(map, "code", QString())));
 
     // Check if views are defined
     bool enableViews = checkIfViewsDefined(map);
@@ -265,6 +266,7 @@ bool GmxPlugin::write(const Map *map, const QString &fileName)
             stream.writeAttribute("scaleX", QString::number(scaleX));
             stream.writeAttribute("scaleY", QString::number(scaleY));
             stream.writeAttribute("rotation", QString::number(-object->rotation()));
+            stream.writeAttribute("code", QString(optionalProperty(object, "code", QString())));
 
             stream.writeEndElement();
         }
